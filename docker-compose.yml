@@ -1,6 +1,7 @@
 version: '3'
 services:
     nginx:
+<<<<<<< HEAD
         image: nginx:stable-alpine
         container_name: nginx
         ports:
@@ -42,3 +43,33 @@ services:
             MYSQL_ROOT_PASSWORD: secret
         depends_on:
             - db
+=======
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - ./conf/nginx:/etc/nginx/conf.d
+            - ./www:/var/www
+            - ./data/logs:/var/log/nginx
+        depends_on:
+            - php
+            - mysql
+    php:
+        build: ./config/php
+        volumes:
+          - ./www:/var/www
+          - ./config/php/php.ini:/usr/local/etc/php/php.ini
+        ports:
+          - "9000:9000"
+    mysql:
+        image: mysql:8
+        restart: unless-stopped
+        command: --default-authentication-plugin=mysql_native_password
+        command: --innodb_use_native_aio=0
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ju
+>>>>>>> origin/main
