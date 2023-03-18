@@ -2,7 +2,6 @@ version: '3'
 services:
     nginx:
         image: nginx:stable-alpine
-        container_name: nginx
         ports:
           - "80:80"
         volumes:
@@ -16,7 +15,6 @@ services:
         build:
           context: ./config/php
           dockerfile: Dockerfile
-        container_name: php
         volumes:
           - ./sites:/var/www
           - ./config/php/php.ini:/usr/local/etc/php/php.ini
@@ -24,7 +22,6 @@ services:
           - "9000:9000"
     db:
         image: mariadb:latest
-        container_name: db
         restart: unless-stopped
         ports:
           - '53003:3306'
