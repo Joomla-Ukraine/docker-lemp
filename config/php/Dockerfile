@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 # Set working directory
 WORKDIR /var/www
@@ -10,6 +10,7 @@ ENV JOOMLA_INSTALLATION_DISABLE_LOCALHOST_CHECK=1
 RUN apt-get update; \
 	apt-get install -y --no-install-recommends \
 		libbz2-dev \
+		nano \
 		libjpeg-dev \
 		libmagickwand-dev \
 		libpq-dev \
@@ -33,13 +34,23 @@ RUN apt-get update; \
 		zip \
 		pcntl \
 		mbstring \
+		intl \
 	; \
 	pecl install imagick-3.6.0; \
-	docker-php-ext-enable imagick; \
+	docker-php-ext-enable imagick \
+	intl; \
 	\
 # check for output like "PHP Warning:  PHP Startup: Unable to load dynamic library 'foo' (tried: ...)
 	err="$(php --version 3>&1 1>&2 2>&3)"; \
 	[ -z "$err" ]
+
+RUN apt-get update && apt-get install -y \
+    libicu-dev \
+    libonig-dev \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install mbstring
+RUN docker-php-ext-enable intl mbstring
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
