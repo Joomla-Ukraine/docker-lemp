@@ -12,6 +12,7 @@
 ```
 127.0.0.1 mysite.loc
 ```
+5. mailhog запускаємо через `localhost:8025` для перегляду листів, а `localhost:1025` для відправки через SMTP. Більш детальніше читайте тут: https://github.com/mailhog/MailHog
 
 ### Запуск Docker-контейнера
 
